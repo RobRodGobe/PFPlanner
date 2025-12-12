@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Calculators{% endblock %}
+
+{% block content %}
+<h2 class="text-2xl font-bold mb-6">Calculators</h2>
+
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+    <!-- Compound Interest -->
+    <a href="/calculators/compound-interest" 
+       class="p-6 bg-white dark:bg-gray-800 shadow rounded hover:shadow-lg transition flex flex-col items-start space-y-3">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 shrink-0 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-3.866 0-7 3.134-7 7h14c0-3.866-3.134-7-7-7z" />
+        </svg>
+        <h3 class="text-xl font-semibold">Compound Interest</h3>
+        <p class="text-gray-600 dark:text-gray-300">See how your money grows over time.</p>
+    </a>
+
+    <!-- Wealth Multiplier -->
+    <a href="/calculators/wealth-multiplier" 
+       class="p-6 bg-white dark:bg-gray-800 shadow rounded hover:shadow-lg transition flex flex-col items-start space-y-3">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 shrink-0 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5l7 7-7 7" />
+        </svg>
+        <h3 class="text-xl font-semibold">Wealth Multiplier</h3>
+        <p class="text-gray-600 dark:text-gray-300">Understand how long it takes to double your money.</p>
+    </a>
+
+    <!-- Car Affordability -->
+    <a href="/calculators/car-affordability" 
+       class="p-6 bg-white dark:bg-gray-800 shadow rounded hover:shadow-lg transition flex flex-col items-start space-y-3">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 shrink-0 text-purple-600 dark:text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 13l2-2h14l2 2v6H3v-6z" />
+        </svg>
+        <h3 class="text-xl font-semibold">Car Affordability</h3>
+        <p class="text-gray-600 dark:text-gray-300">Find out how much car you can truly afford.</p>
+    </a>
+
+    <!-- House Affordability -->
+    <a href="/calculators/house-affordability" 
+       class="p-6 bg-white dark:bg-gray-800 shadow rounded hover:shadow-lg transition flex flex-col items-start space-y-3">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 shrink-0 text-yellow-600 dark:text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l9-9 9 9v9H3v-9z" />
+        </svg>
+        <h3 class="text-xl font-semibold">House Affordability</h3>
+        <p class="text-gray-600 dark:text-gray-300">Estimate how much home fits your budget.</p>
+    </a>
+
+    <!-- Net Worth Benchmark -->
+    <a href="/calculators/net-worth-benchmark" 
+       class="p-6 bg-white dark:bg-gray-800 shadow rounded hover:shadow-lg transition flex flex-col items-start space-y-3">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 shrink-0 text-red-600 dark:text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 11V3h2v8h8v2h-8v8h-2v-8H3v-2h8z" />
+        </svg>
+        <h3 class="text-xl font-semibold">Net Worth Benchmark</h3>
+        <p class="text-gray-600 dark:text-gray-300">Compare your net worth to national averages.</p>
+    </a>
+
+    <!-- Roth vs Traditional -->
+    <a href="/calculators/roth-vs-traditional" 
+       class="p-6 bg-white dark:bg-gray-800 shadow rounded hover:shadow-lg transition flex flex-col items-start space-y-3">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 shrink-0 text-indigo-600 dark:text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a5 5 0 00-10 0v2H5v12h14V9h-2z" />
+        </svg>
+        <h3 class="text-xl font-semibold">Roth vs Traditional</h3>
+        <p class="text-gray-600 dark:text-gray-300">Choose the best retirement account for your taxes.</p>
+    </a>
+
+    <!-- Fine Calculator -->
+    <a href="/calculators/fine" 
+       class="p-6 bg-white dark:bg-gray-800 shadow rounded hover:shadow-lg transition flex flex-col items-start space-y-3">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 shrink-0 text-pink-600 dark:text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3" />
+        </svg>
+        <h3 class="text-xl font-semibold">Fine Calculator</h3>
+        <p class="text-gray-600 dark:text-gray-300">Calculate penalties, fees, and interest charges.</p>
+    </a>
+
+</div>
+{% endblock %}

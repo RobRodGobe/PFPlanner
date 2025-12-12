@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Settings{% endblock %}
+
+{% block content %}
+<h2 class="text-2xl font-bold mb-6">Feature Settings</h2>
+
+<form method="post" action="/settings/update" class="space-y-4">
+
+    {% for key, value in config.items() if key.startswith("FEATURE_") %}
+    <label class="flex items-center space-x-3">
+        <input type="checkbox" name="{{ key }}" {% if value %}checked{% endif %} class="h-5 w-5">
+        <span>{{ key.replace("FEATURE_", "").replace("_", " ").title() }}</span>
+    </label>
+    {% endfor %}
+
+    <button class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Save</button>
+</form>
+{% endblock %}

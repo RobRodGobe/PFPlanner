@@ -1,0 +1,8 @@
+<ul class="space-y-2">
+    {% for m in messages %}
+    <li class="p-3 bg-white shadow rounded">
+        {{ m.text }}
+        <span class="text-xs text-gray-500 block">{{ m.created_at }}</span>
+    </li>
+    {% endfor %}
+</ul>

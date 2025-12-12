@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<h2 class="text-2xl font-bold mb-6">Welcome</h2>
+
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+    {% if config.FEATURE_CALCULATORS %}
+    <a href="/calculators" class="p-6 bg-white dark:bg-gray-800 shadow rounded hover:shadow-lg transition flex flex-col items-start space-y-3">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 shrink-0 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6M9 11h6m-6 4h6m2 4H7a2 2 0 01-2-2V5a2 2 0 012-2h10a2 2 0 012 2v12a2 2 0 01-2 2z" />
+        </svg>
+        <h3 class="text-xl font-semibold">Calculators</h3>
+        <p class="text-gray-600 dark:text-gray-300">Financial tools to help you plan smarter.</p>
+    </a>
+    {% endif %}
+
+    {% if config.FEATURE_ACCOUNTS %}
+    <a href="/accounts" class="p-6 bg-white dark:bg-gray-800 shadow rounded hover:shadow-lg transition flex flex-col items-start space-y-3">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 shrink-0 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5l7 7-7 7" />
+        </svg>
+        <h3 class="text-xl font-semibold">Accounts</h3>
+        <p class="text-gray-600 dark:text-gray-300">Track balances, transactions, and more.</p>
+    </a>
+    {% endif %}
+
+    {% if config.FEATURE_BUDGET %}
+    <a href="/budget" class="p-6 bg-white dark:bg-gray-800 shadow rounded hover:shadow-lg transition flex flex-col items-start space-y-3">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 shrink-0 text-purple-600 dark:text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3v18h18" />
+        </svg>
+        <h3 class="text-xl font-semibold">Budget</h3>
+        <p class="text-gray-600 dark:text-gray-300">Plan monthly spending and stay on track.</p>
+    </a>
+    {% endif %}
+
+    {% if config.FEATURE_RETIREMENT %}
+    <a href="/retirement" class="p-6 bg-white dark:bg-gray-800 shadow rounded hover:shadow-lg transition flex flex-col items-start space-y-3">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 shrink-0 text-yellow-600 dark:text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-3.866 0-7 3.134-7 7h14c0-3.866-3.134-7-7-7z" />
+        </svg>
+        <h3 class="text-xl font-semibold">Retirement Planning</h3>
+        <p class="text-gray-600 dark:text-gray-300">Forecast your future and build security.</p>
+    </a>
+    {% endif %}
+
+    {% if config.FEATURE_EDUCATION %}
+    <a href="/education" class="p-6 bg-white dark:bg-gray-800 shadow rounded hover:shadow-lg transition flex flex-col items-start space-y-3">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 shrink-0 text-red-600 dark:text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z" />
+        </svg>
+        <h3 class="text-xl font-semibold">Education</h3>
+        <p class="text-gray-600 dark:text-gray-300">Plan for college and future learning.</p>
+    </a>
+    {% endif %}
+
+</div>
+
+{% endblock %}
