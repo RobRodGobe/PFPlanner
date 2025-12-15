@@ -7,7 +7,7 @@
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
     {% if config.FEATURE_CALCULATORS %}
-    <a href="/calculators" class="p-6 bg-white dark:bg-gray-800 shadow rounded hover:shadow-lg transition flex flex-col items-start space-y-3">
+    <a href="{{ url_for('calculators.calculators_home') }}" class="p-6 bg-white dark:bg-gray-800 shadow rounded hover:shadow-lg transition flex flex-col items-start space-y-3">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 shrink-0 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6M9 11h6m-6 4h6m2 4H7a2 2 0 01-2-2V5a2 2 0 012-2h10a2 2 0 012 2v12a2 2 0 01-2 2z" />
         </svg>
@@ -17,7 +17,7 @@
     {% endif %}
 
     {% if config.FEATURE_ACCOUNTS %}
-    <a href="/accounts" class="p-6 bg-white dark:bg-gray-800 shadow rounded hover:shadow-lg transition flex flex-col items-start space-y-3">
+    <a href="{{ url_for('bank_accounts.bank_accounts_home') }}" class="p-6 bg-white dark:bg-gray-800 shadow rounded hover:shadow-lg transition flex flex-col items-start space-y-3">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 shrink-0 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5l7 7-7 7" />
         </svg>
@@ -27,7 +27,7 @@
     {% endif %}
 
     {% if config.FEATURE_BUDGET %}
-    <a href="/budget" class="p-6 bg-white dark:bg-gray-800 shadow rounded hover:shadow-lg transition flex flex-col items-start space-y-3">
+    <a href="{{ url_for('budget.budget_home') }}" class="p-6 bg-white dark:bg-gray-800 shadow rounded hover:shadow-lg transition flex flex-col items-start space-y-3">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 shrink-0 text-purple-600 dark:text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3v18h18" />
         </svg>
@@ -37,7 +37,7 @@
     {% endif %}
 
     {% if config.FEATURE_RETIREMENT %}
-    <a href="/retirement" class="p-6 bg-white dark:bg-gray-800 shadow rounded hover:shadow-lg transition flex flex-col items-start space-y-3">
+    <a href="{{ url_for('retirement.retirement_home') }}" class="p-6 bg-white dark:bg-gray-800 shadow rounded hover:shadow-lg transition flex flex-col items-start space-y-3">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 shrink-0 text-yellow-600 dark:text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-3.866 0-7 3.134-7 7h14c0-3.866-3.134-7-7-7z" />
         </svg>
@@ -47,7 +47,7 @@
     {% endif %}
 
     {% if config.FEATURE_EDUCATION %}
-    <a href="/education" class="p-6 bg-white dark:bg-gray-800 shadow rounded hover:shadow-lg transition flex flex-col items-start space-y-3">
+    <a href="{{ url_for('education.education_home') }}" class="p-6 bg-white dark:bg-gray-800 shadow rounded hover:shadow-lg transition flex flex-col items-start space-y-3">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 shrink-0 text-red-600 dark:text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z" />
         </svg>
@@ -59,3 +59,5 @@
 </div>
 
 {% endblock %}
+
+<p>Year test: {{ current_year }}</p>

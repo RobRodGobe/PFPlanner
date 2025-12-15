@@ -1,23 +1,26 @@
 import os
-from flask import Flask
+from flask import Flask, request, redirect
 from Backend.config import DevelopmentConfig, TestingConfig, ProductionConfig
 from Backend.extensions import db, migrate, login_manager, jwt
 from Backend.blueprints.main import main_bp
 from Backend.blueprints.api_v1 import api_v1_bp
 from Backend.blueprints.api_v2 import api_v2_bp
+from Backend.services.navigation import pop_nav, push_nav, EXCLUDED_ENDPOINTS
 from Backend.services.message_service import MessageService
 from Backend.auth import get_auth_strategy
 from Backend.models import User
+from Backend.blueprints.account import account_bp
 from Backend.blueprints.auth import auth_bp
-from Backend.blueprints.pages import pages_bp
 from Backend.blueprints.calculators import calculators_bp
-from Backend.blueprints.accounts import accounts_bp
+from Backend.blueprints.contact import contact_bp
+from Backend.blueprints.bank_accounts import bank_accounts_bp
 from Backend.blueprints.budget import budget_bp
 from Backend.blueprints.education import education_bp
 from Backend.blueprints.retirement import retirement_bp
 from Backend.blueprints.settings import settings_bp
+from Backend.blueprints.pages import pages_bp
 from dotenv import load_dotenv
-from flask import redirect
+from datetime import datetime
 
 load_dotenv()
 
@@ -70,14 +73,38 @@ def create_app(config_name=None):
             from flask import render_template
             return render_template("maintenance.html"), 503
         
+    @app.before_request
+    def track_navigation():
+        # Skip excluded endpoints
+        if request.endpoint in EXCLUDED_ENDPOINTS:
+            return
+
+        # Skip static files
+        if request.path.startswith("/static/"):
+            return
+
+        # Skip API routes
+        if request.path.startswith("/api/"):
+            return
+
+        push_nav(request.path)
+
+    @app.route("/back")
+    def go_back():
+        previous = pop_nav()
+        return redirect(previous)
+
+        
     # Blueprints
     app.register_blueprint(main_bp)
     app.register_blueprint(api_v1_bp, url_prefix="/api/v1")
     app.register_blueprint(api_v2_bp, url_prefix="/api/v2") # for reference only, not currently used
+    app.register_blueprint(account_bp)
     app.register_blueprint(auth_bp)
-    app.register_blueprint(accounts_bp)
+    app.register_blueprint(bank_accounts_bp)
     app.register_blueprint(budget_bp)
     app.register_blueprint(calculators_bp)
+    app.register_blueprint(contact_bp)
     app.register_blueprint(education_bp)
     app.register_blueprint(retirement_bp)
     app.register_blueprint(settings_bp)
@@ -87,21 +114,12 @@ def create_app(config_name=None):
     @app.context_processor
     def inject_config():
         return dict(config=app.config)
+
+    @app.context_processor
+    def inject_globals():
+        return {
+            "config": app.config,
+            "current_year": datetime.now().year
+        }
     
-    print("\n=== URL MAP ===")
-    for rule in app.url_map.iter_rules():
-        print(rule, "->", rule.endpoint)
-    print("===============\n")
-
-    @app.route("/calculators", methods=["GET"])
-    def calculators_no_slash():
-        # NOTE: this is an explicit redirect you control
-        return redirect("/calculators/", code=302)
-        
-    # Routing fix for Github Codespaces
-    app.url_map.strict_slashes = False
-    from werkzeug.middleware.proxy_fix import ProxyFix
-    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
-
     return app
-

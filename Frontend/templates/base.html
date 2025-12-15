@@ -27,10 +27,11 @@
     <!-- Desktop nav -->
     <nav class="hidden md:flex space-x-4">
         {% if config.AUTH_ENABLED and config.AUTH_STRATEGY != 'noauth' %}
-        <a href="/account" class="hover:underline">My Account</a>
-        <a href="/auth/logout" class="hover:underline">Logout</a>
+        <a href="{{ url_for('account.account_home') }}" class="hover:underline">My Account</a>
+        <a href="{{ url_for('auth.logout') }}" class="hover:underline">Logout</a>
         {% endif %}
-        <a href="/contact" class="hover:underline">Contact</a>
+        <a href="{{ url_for('settings.settings_home') }}" class="hover:underline">Settings</a>
+        <a href="{{ url_for('contact.contact_home') }}" class="hover:underline">Contact</a>
         <button onclick="toggleDarkMode()" class="px-3 py-1 border rounded text-sm">Dark Mode</button>
     </nav>
 </header>
@@ -38,16 +39,19 @@
 <!-- Mobile nav -->
 <nav id="mobile-menu" class="md:hidden hidden flex flex-col space-y-2 p-4 bg-white dark:bg-gray-800 shadow">
     {% if config.AUTH_ENABLED and config.AUTH_STRATEGY != 'noauth' %}
-    <a href="/account" class="hover:underline">My Account</a>
-    <a href="/auth/logout" class="hover:underline">Logout</a>
+    <a href="{{ url_for('account.account_home') }}" class="hover:underline">My Account</a>
+    <a href="{{ url_for('auth.logout') }}" class="hover:underline">Logout</a>
     {% endif %}
-    <a href="/settings" class="hover:underline">Settings</a>
-    <a href="/contact" class="hover:underline">Contact</a>
+    <a href="{{ url_for('settings.settings_home') }}" class="hover:underline">Settings</a>
+    <a href="{{ url_for('contact.contact_home') }}" class="hover:underline">Contact</a>
     <button onclick="toggleDarkMode()" class="px-3 py-1 border rounded text-sm w-32">Dark Mode</button>
 </nav>
 
 
 <main class="flex-grow p-6">
+    {% if session.nav_stack and session.nav_stack|length > 1 %}
+        <a href="{{ url_for('go_back') }}" class="back-button">Back</a>
+    {% endif %}
     {% block content %}{% endblock %}
 </main>
 

@@ -1,7 +1,7 @@
 from flask import render_template
 from . import calculators_bp
 
-@calculators_bp.get("/", strict_slashes=False)
+@calculators_bp.get("/")
 def calculators_home():
     return render_template("calculators/index.html")
 

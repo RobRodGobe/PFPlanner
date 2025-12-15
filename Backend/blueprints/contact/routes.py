@@ -1,6 +1,6 @@
 from flask import render_template
-from . import accounts_bp
+from . import contact_bp
 
-@accounts_bp.get("/")
-def accounts_home():
+@contact_bp.get("/")
+def contact_home():
     return render_template("coming_soon.html")
