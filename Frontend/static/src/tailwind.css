@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom reusable classes */
+.input {
+    @apply w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600;
+}
+
+.back-button {
+    @apply inline-block mb-4 px-3 py-1 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition;
+}

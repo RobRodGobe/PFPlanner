@@ -12,13 +12,13 @@ EXCLUDED_ENDPOINTS = {
 
 def push_nav(path):
     stack = session.get("nav_stack", [])
-    logging.warning(f"PUSH NAV: {path} | STACK BEFORE: {stack}")
+    #logging.warning(f"PUSH NAV: {path} | STACK BEFORE: {stack}")
 
     if not stack or stack[-1] != path:
         stack.append(path)
 
     session["nav_stack"] = stack
-    logging.warning(f"STACK AFTER: {stack}")
+    #logging.warning(f"STACK AFTER: {stack}")
 
 
 

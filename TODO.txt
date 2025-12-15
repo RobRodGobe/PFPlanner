@@ -1,3 +1,8 @@
-- Add back button on navigation
 - Add contact information
 - Add simple calculators
+
+Run this after restarting Codespaces
+npm install -g tailwindcss@3
+tailwindcss -i ./Frontend/static/src/tailwind.css -o ./Frontend/static/styles.css --watch
+pip install -r ./requirements.txt
+flask run
