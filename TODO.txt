@@ -1,5 +1,9 @@
 - Add contact information
 - Add simple calculators
+- Move sanitize_number from Backend/blueprints/calculators/routes.py to a helper class
+- Fix tool tips
+- In Mortgage calculator, move results to display on the right, but on mobile move down
+- In Mortgage calculator, add section to reverse calculate from home value 
 
 Run this after restarting Codespaces
 npm install -g tailwindcss@3

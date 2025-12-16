@@ -1,0 +1,26 @@
+{# Frontend/templates/calculators/house_affordability/_results.html #}
+
+{% if errors and errors|length > 0 %}
+<div class="p-4 mb-4 bg-red-50 border border-red-200 text-red-700 rounded">
+    <p class="font-semibold mb-1">Please fix the following:</p>
+    <ul class="list-disc list-inside text-sm">
+        {% for msg in errors.values() %}
+        <li>{{ msg }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+{% if result %}
+<div class="p-4 bg-white dark:bg-gray-800 rounded shadow space-y-3">
+
+    <p>{{ result.down_payment_pct | round(0) | int }}% <strong>Down</strong></p>
+
+    <p>${{ result.monthly_payment | round(0, 'ceil') | int }} <strong>/ Month</strong></p>
+
+    <p>{{ result.income_pct | round(0) | int }}% <strong>of Monthly Income</strong></p>
+
+    <p>${{ result.home_value | round(0, 'ceil') | int }} <strong>is how much house you can afford without going broke!</strong></p>
+
+</div>
+{% endif %}

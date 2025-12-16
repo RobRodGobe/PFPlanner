@@ -1,0 +1,90 @@
+{# Frontend/templates/calculators/house_affordability/_advanced_fields.html #}
+{% from "macros/input_combo.html" import input_combo %}
+{% set errs = errors or {} %}
+
+<div class="space-y-6">
+
+    <!-- Property Tax with tooltip icon -->
+    <div class="relative">
+        {{ input_combo(
+            name="property_tax",
+            label="Property Tax (annual)",
+            suffix="%",
+            placeholder="0",
+            classes="percent-input",
+            error=errs.property_tax
+        ) }}
+
+        <div 
+            class="tooltip-icon"
+            data-tooltip="Annual property tax expressed as a percentage of the home's value."
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" 
+                 class="h-4 w-4 text-gray-500" 
+                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <circle cx="12" cy="12" r="10" stroke-width="2"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 16v-4m0-4h.01"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Home Insurance with tooltip icon -->
+    <div class="relative">
+        {{ input_combo(
+            name="home_insurance",
+            label="Home Insurance (annual)",
+            suffix="%",
+            placeholder="0",
+            classes="percent-input",
+            error=errs.home_insurance
+        ) }}
+
+        <div 
+            class="tooltip-icon"
+            data-tooltip="Annual homeowners insurance cost expressed as a percentage of the home's value."
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" 
+                 class="h-4 w-4 text-gray-500" 
+                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <circle cx="12" cy="12" r="10" stroke-width="2"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 16v-4m0-4h.01"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- HOA (no tooltip) -->
+    {{ input_combo(
+        name="hoa",
+        label="HOA Dues (monthly)",
+        prefix="$",
+        placeholder="0",
+        classes="money-input",
+        error=errs.hoa
+    ) }}
+
+    <!-- MI Checkbox (no tooltip here) -->
+    <div class="flex items-center space-x-2">
+        <input 
+            type="checkbox" 
+            name="include_mi"
+            hx-trigger="change"
+            hx-get="{{ url_for('calculators.house_affordability') }}"
+            hx-target="#mi-field"
+            hx-swap="innerHTML"
+            hx-vals='js:{
+                "toggle_mi": event.target.checked ? "1" : "0",
+                "mi_value": document.getElementById("mi_value")?.value || ""
+            }'
+            class="cursor-pointer"
+        >
+
+        <label class="cursor-pointer">
+            Include Mortgage Insurance
+        </label>
+    </div>
+
+    <div id="mi-field" class="mt-2"></div>
+
+</div>

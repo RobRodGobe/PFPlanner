@@ -1,0 +1,99 @@
+{# Frontend/templates/calculators/house_affordability/index.html #}
+{% extends "base.html" %}
+{% from "macros/input_combo.html" import input_combo %}
+{% block title %}House Affordability{% endblock %}
+
+{% block content %}
+
+<h1 class="text-2xl font-bold mb-4">House Affordability Calculator</h1>
+
+<!-- TWO-COLUMN LAYOUT -->
+<div class="flex flex-col lg:flex-row lg:space-x-12">
+
+    <!-- LEFT COLUMN: FORM -->
+    <div class="flex-1">
+        <form 
+            method="POST"
+            hx-post="{{ url_for('calculators.house_affordability') }}"
+            hx-target="#results"
+            hx-swap="innerHTML"
+            class="space-y-6 max-w-lg"
+        >
+
+            {{ input_combo(
+                name="income",
+                label="Annual Gross Household Income",
+                prefix="$",
+                placeholder="0",
+                classes="money-input",
+                error=errors.income,
+                required=True
+            ) }}
+
+            {{ input_combo(
+                name="down_payment",
+                label="Down Payment",
+                prefix="$",
+                placeholder="0",
+                classes="money-input",
+                error=errors.down_payment,
+                required=True
+            ) }}
+
+            {{ input_combo(
+                name="interest_rate",
+                label="Interest Rate",
+                suffix="%",
+                placeholder="0",
+                classes="percent-input",
+                error=errors.interest_rate,
+                required=True
+            ) }}
+
+            {{ input_combo(
+                name="loan_term",
+                label="Loan Term (years)",
+                suffix="years",
+                placeholder="30",
+                classes="numeric-input",
+                error=errors.loan_term,
+                required=True
+            ) }}
+
+            <!-- ADVANCED TOGGLE -->
+            <input type="hidden" id="advanced-state" name="advanced_state" value="0">
+
+            <button
+                type="button"
+                class="mt-2 px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded"
+                hx-get="{{ url_for('calculators.house_affordability') }}"
+                hx-vals='js:{"show": document.getElementById("advanced-state").value === "0" ? "1" : "0"}'
+                hx-target="#advanced-fields"
+                hx-swap="innerHTML"
+                hx-on::after-request="document.getElementById('advanced-state').value = document.getElementById('advanced-state').value === '0' ? '1' : '0';"
+            >
+                Advanced Options
+            </button>
+
+            <div id="advanced-fields" class="mt-4">
+                {% if show_advanced %}
+                    {% include "calculators/house_affordability/_advanced_fields.html" %}
+                {% endif %}
+            </div>
+
+            <button class="mt-6 px-4 py-2 bg-blue-600 text-white rounded">
+                Calculate
+            </button>
+        </form>
+    </div>
+
+    <!-- RIGHT COLUMN: RESULTS -->
+    <div class="flex-1 mt-8 lg:mt-0" id="results">
+        {% if result %}
+            {% include "calculators/house_affordability/_results.html" %}
+        {% endif %}
+    </div>
+
+</div>
+
+{% endblock %}

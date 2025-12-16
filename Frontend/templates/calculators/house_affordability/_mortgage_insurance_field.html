@@ -1,0 +1,40 @@
+{# Frontend/templates/calculators/house_affordability/_mortgage_insurance_field.html #}
+{% from "macros/input_combo.html" import input_combo %}
+{% set errs = errors or {} %}
+
+{% if show %}
+<div class="relative">
+
+    {{ input_combo(
+        name="mi_amount",
+        label="Mortgage Insurance (monthly)",
+        suffix="%",
+        placeholder="0",
+        classes="percent-input",
+        error=errs.mi_amount
+    ) }}
+
+    <!-- Tooltip icon for MI input -->
+    <div 
+        class="tooltip-icon"
+        data-tooltip="Private mortgage insurance applies when the down payment is below 20%."
+    >
+        <svg xmlns="http://www.w3.org/2000/svg" 
+             class="h-4 w-4 text-gray-500" 
+             fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <circle cx="12" cy="12" r="10" stroke-width="2"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 16v-4m0-4h.01"/>
+        </svg>
+    </div>
+
+    <!-- Ensure the input has id="mi_value" for HTMX -->
+    <script>
+        (function() {
+            const input = document.querySelector('input[name="mi_amount"]');
+            if (input) input.id = "mi_value";
+        })();
+    </script>
+
+</div>
+{% endif %}

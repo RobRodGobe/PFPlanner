@@ -59,11 +59,10 @@
     PF Planner © {{ current_year }}
 </footer>
 
-</body>
-</html>
-
 <script>
-    // Load saved theme
+    /* -------------------------------
+       DARK MODE
+    --------------------------------*/
     if (localStorage.getItem("theme") === "dark") {
         document.documentElement.classList.add("dark");
     }
@@ -72,4 +71,92 @@
         const isDark = document.documentElement.classList.toggle("dark");
         localStorage.setItem("theme", isDark ? "dark" : "light");
     }
+
+    /* -------------------------------
+       HELPER: sanitize numeric string
+       - keep digits and at most one dot
+    --------------------------------*/
+    function sanitizeNumericString(value) {
+        if (!value) return "";
+
+        // Remove everything except digits and dots
+        let cleaned = value.replace(/[^0-9.]/g, "");
+
+        // If multiple dots, keep only the first
+        const firstDot = cleaned.indexOf(".");
+        if (firstDot !== -1) {
+            const before = cleaned.slice(0, firstDot + 1);
+            const after = cleaned.slice(firstDot + 1).replace(/\./g, "");
+            cleaned = before + after;
+        }
+
+        return cleaned;
+    }
+
+    /* -------------------------------
+       REAL-TIME SANITIZATION + FORMATTING
+       This alone should enforce numeric-only,
+       even if keydown behaves oddly.
+    --------------------------------*/
+    document.addEventListener("input", function (e) {
+        const el = e.target;
+
+        if (el.classList.contains("money-input") || el.classList.contains("term-input")) {
+            let raw = sanitizeNumericString(el.value);
+            if (raw === "") {
+                el.value = "";
+                return;
+            }
+            const num = Number(raw);
+            el.value = Number.isNaN(num) ? "" : num.toLocaleString("en-US");
+        }
+
+        if (el.classList.contains("percent-input")) {
+            let raw = sanitizeNumericString(el.value);
+            el.value = raw;
+        }
+    });
+
+    /* -------------------------------
+       OPTIONAL: block obvious bad keys
+       (input handler is still the final gatekeeper)
+    --------------------------------*/
+    document.addEventListener("keydown", function (e) {
+        const el = e.target;
+
+        if (el.classList.contains("money-input") || el.classList.contains("percent-input")  || el.classList.contains("term-input")) {
+            const allowedKeys = [
+                "Backspace", "Delete", "ArrowLeft", "ArrowRight",
+                "Tab", "Home", "End"
+            ];
+
+            if (allowedKeys.includes(e.key)) return;
+
+            // Allow one decimal point
+            if (e.key === "." && !el.value.includes(".")) return;
+
+            // If key is a single digit, allow it
+            if (/^[0-9]$/.test(e.key)) return;
+
+            // Everything else: block
+            e.preventDefault();
+        }
+    });
+
+    /* -------------------------------
+       SANITIZE PASTE
+    --------------------------------*/
+    document.addEventListener("paste", function (e) {
+        const el = e.target;
+
+        if (el.classList.contains("money-input") || el.classList.contains("percent-input") || el.classList.contains("term-input")) {
+            e.preventDefault();
+            let text = (e.clipboardData || window.clipboardData).getData("text") || "";
+            el.value = sanitizeNumericString(text);
+            el.dispatchEvent(new Event("input", { bubbles: true }));
+        }
+    });
 </script>
+
+</body>
+</html>

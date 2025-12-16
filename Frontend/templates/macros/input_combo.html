@@ -1,0 +1,75 @@
+{% macro input_combo(
+    name,
+    label,
+    prefix=None,
+    suffix=None,
+    placeholder="",
+    classes="",
+    error=None,
+    required=False
+) %}
+<div class="space-y-1">
+
+    <label for="{{ name }}" class="block font-semibold mb-1">
+        {{ label }}{% if required %} *{% endif %}
+    </label>
+
+    <div class="
+        flex items-stretch
+        rounded
+        border
+        bg-white dark:bg-gray-800
+        border-gray-300 dark:border-gray-700
+        focus-within:ring-2 focus-within:ring-blue-500
+        {% if error %} border-red-500 {% endif %}
+    ">
+
+        {% if prefix %}
+        <div class="
+            flex items-center px-3
+            bg-inherit
+            text-gray-600 dark:text-gray-300 text-sm
+            rounded-l
+        ">
+            {{ prefix }}
+        </div>
+        {% endif %}
+
+        <input
+            id="{{ name }}"
+            name="{{ name }}"
+            type="text"
+            placeholder="{{ placeholder }}"
+            {% if required %}required{% endif %}
+            class="
+                flex-1
+                bg-inherit
+                border-none
+                focus:outline-none
+                px-3 py-2
+                text-gray-900 dark:text-gray-100
+                {% if prefix %} rounded-l-none {% endif %}
+                {% if suffix %} rounded-r-none {% endif %}
+                {{ classes }}
+            "
+        >
+
+        {% if suffix %}
+        <div class="
+            flex items-center px-3
+            bg-inherit
+            text-gray-600 dark:text-gray-300 text-sm
+            rounded-r
+        ">
+            {{ suffix }}
+        </div>
+        {% endif %}
+
+    </div>
+
+    {% if error %}
+    <p class="text-red-500 text-sm">{{ error }}</p>
+    {% endif %}
+
+</div>
+{% endmacro %}

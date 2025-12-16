@@ -10,3 +10,59 @@
 .back-button {
     @apply inline-block mb-4 px-3 py-1 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition;
 }
+
+/* Simple custom tooltip system using [data-tooltip] */
+
+/* Tooltip anchor */
+/* Tooltip anchor */
+[data-tooltip] {
+  position: relative;
+}
+
+/* Tooltip bubble */
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  right: 0;
+  top: -0.5rem;
+  transform: translateY(-100%);
+  background-color: rgba(31, 41, 55, 0.95);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease-in-out;
+  z-index: 50;
+}
+
+/* Tooltip arrow */
+[data-tooltip]::before {
+  content: "";
+  position: absolute;
+  right: 0.25rem;
+  top: -0.5rem;
+  transform: translateY(-2px);
+  border-width: 6px;
+  border-style: solid;
+  border-color: rgba(31, 41, 55, 0.95) transparent transparent transparent;
+  opacity: 0;
+  transition: opacity 0.15s ease-in-out;
+  z-index: 40;
+}
+
+/* Show on hover */
+[data-tooltip]:hover::after,
+[data-tooltip]:hover::before {
+  opacity: 1;
+}
+
+/* Icon alignment helper: sits near the label line */
+.tooltip-icon {
+  position: absolute;
+  right: 0.5rem;
+  top: 0.65rem; /* tweak this if needed */
+  cursor: help;
+}

@@ -3,11 +3,17 @@ from markupsafe import escape
 from . import calculators_bp
 
 def sanitize_number(value):
-    """Remove commas, spaces, and convert to float safely."""
     if value is None or value == "":
         return None
     try:
-        return float(str(value).replace(",", "").strip())
+        cleaned = (
+            str(value)
+            .replace(",", "")
+            .replace("$", "")
+            .replace("%", "")
+            .strip()
+        )
+        return float(cleaned)
     except ValueError:
         return None
 
@@ -36,13 +42,13 @@ def house_affordability():
     if request.method == "GET" and request.headers.get("HX-Request") and "toggle_mi" in request.args:
         show = request.args.get("toggle_mi") == "1"
         value = request.args.get("mi_value", "")
-        return render_template("calculators/_mortgage_insurance_field.html", show=show, value=value)
+        return render_template("calculators/house_affordability/_mortgage_insurance_field.html", show=show, value=value)
 
     # HTMX: load/collapse advanced fields only
     if request.method == "GET" and request.headers.get("HX-Request"):
         show = request.args.get("show") == "1"
         return render_template(
-            "calculators/_advanced_fields.html",
+            "calculators/house_affordability/_advanced_fields.html",
             show=show
         )
 
@@ -93,14 +99,14 @@ def house_affordability():
         # HTMX POST: return only results partial
         if request.headers.get("HX-Request"):
             return render_template(
-                "calculators/_house_affordability_results.html",
+                "calculators/house_affordability/_results.html",
                 errors=errors,
                 result=result
             )
 
     # ✅ FULL PAGE GET (this was missing!)
     return render_template(
-        "calculators/house_affordability.html",
+        "calculators/house_affordability/index.html",
         errors=errors,
         result=result
     )
