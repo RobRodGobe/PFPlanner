@@ -16,11 +16,11 @@
 
     <p>{{ result.down_payment_pct | round(0) | int }}% <strong>Down</strong></p>
 
-    <p>${{ result.monthly_payment | round(0, 'ceil') | int }} <strong>/ Month</strong></p>
+    <p>${{ result.monthly_payment | round(0) | money }} <strong>/ Month</strong></p>
 
     <p>{{ result.income_pct | round(0) | int }}% <strong>of Monthly Income</strong></p>
 
-    <p>${{ result.home_value | round(0, 'ceil') | int }} <strong>is how much house you can afford without going broke!</strong></p>
+    <p>${{ result.home_value | round(0) | money }} <strong>is how much house you can afford without going broke!</strong></p>
 
 </div>
 {% endif %}

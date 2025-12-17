@@ -93,7 +93,13 @@ def create_app(config_name=None):
     def go_back():
         previous = pop_nav()
         return redirect(previous)
-
+    
+    @app.template_filter()
+    def money(value):
+        try:
+            return f"{int(float(value)):,}"
+        except:
+            return value
         
     # Blueprints
     app.register_blueprint(main_bp)

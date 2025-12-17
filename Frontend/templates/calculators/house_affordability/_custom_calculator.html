@@ -1,0 +1,275 @@
+{# Frontend/templates/calculators/house_affordability/_custom_calculator.html #}
+{% from "macros/input_combo.html" import input_combo %}
+
+<div class="flex flex-col lg:flex-row lg:space-x-12">
+
+    <!-- LEFT COLUMN -->
+    <div class="flex-1 space-y-6">
+
+        <form
+            method="POST"
+            hx-post="{{ url_for('calculators.house_affordability_custom') }}"
+            hx-target="#custom-results"
+            hx-swap="innerHTML"
+            id="custom-form"
+        >
+
+            <!-- INCOME -->
+            {{ input_combo(
+                name="income",
+                label="Annual Gross Household Income",
+                prefix="$",
+                placeholder="0",
+                classes="money-input",
+                required=True
+            ) }}
+
+            <!-- DOWN PAYMENT SECTION -->
+            <div class="space-y-2">
+
+                <label class="font-semibold">Down Payment</label>
+
+                <!-- MODE TOGGLE -->
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm">Mode:</span>
+
+                    <label class="cursor-pointer flex items-center space-x-1">
+                        <input type="radio" name="dp_mode" value="dollar" checked>
+                        <span>$</span>
+                    </label>
+
+                    <label class="cursor-pointer flex items-center space-x-1">
+                        <input type="radio" name="dp_mode" value="percent">
+                        <span>%</span>
+                    </label>
+                </div>
+
+                <!-- SLIDER LABELS -->
+                <div class="flex justify-between text-sm text-gray-600">
+                    <span id="dp-min-label">0%</span>
+                    <span id="dp-max-label">100%</span>
+                </div>
+
+                <!-- SLIDER WRAPPER -->
+                <div class="relative w-full mt-2">
+
+                    <!-- Slider -->
+                    <input
+                        type="range"
+                        name="down_payment_slider"
+                        id="down_payment_slider"
+                        min="0"
+                        max="100"
+                        value="20"
+                        class="w-full appearance-none h-2 bg-gray-300 dark:bg-gray-700 rounded-lg cursor-pointer"
+                    >
+
+                    <!-- Label inside knob -->
+                    <div
+                        id="dp-slider-label"
+                        class="absolute top-1/2 -translate-y-1/2 
+                               px-2 py-0.5 text-xs font-semibold
+                               bg-blue-600 dark:bg-blue-500 
+                               text-white rounded-full pointer-events-none
+                               transition-all duration-75"
+                    >
+                        20%
+                    </div>
+                </div>
+
+                <!-- MAX VALUE FOR $ MODE -->
+                <div id="dp-max-row" class="flex items-center space-x-2">
+                    <label>Max $:</label>
+                    <input
+                        type="number"
+                        name="down_payment_max"
+                        id="down_payment_max"
+                        class="border rounded px-2 py-1 w-32 
+                               bg-white dark:bg-gray-800 
+                               text-gray-900 dark:text-gray-100 
+                               border-gray-300 dark:border-gray-600"
+                        value="200000"
+                    >
+                </div>
+
+            </div>
+
+            <!-- PERCENTAGE OF MONTHLY INCOME -->
+            <div class="space-y-2">
+                <label class="font-semibold">Percentage of Monthly Income</label>
+
+                <!-- Slider wrapper -->
+                <div class="relative w-full mt-2">
+
+                    <input
+                        type="range"
+                        name="income_pct_slider"
+                        id="income_pct_slider"
+                        min="0"
+                        max="25"
+                        value="25"
+                        class="w-full appearance-none h-2 bg-gray-300 dark:bg-gray-700 rounded-lg cursor-pointer"
+                    >
+
+                    <!-- Label inside knob -->
+                    <div
+                        id="income-pct-label"
+                        class="absolute top-1/2 -translate-y-1/2 
+                               px-2 py-0.5 text-xs font-semibold
+                               bg-blue-600 dark:bg-blue-500 
+                               text-white rounded-full pointer-events-none
+                               transition-all duration-75"
+                    >
+                        25%
+                    </div>
+                </div>
+
+                <!-- Min/max labels -->
+                <div class="flex justify-between text-sm text-gray-600">
+                    <span>0%</span>
+                    <span>25%</span>
+                </div>
+            </div>
+
+            <!-- INTEREST RATE -->
+            {{ input_combo(
+                name="interest_rate",
+                label="Interest Rate",
+                suffix="%",
+                placeholder="0",
+                classes="percent-input",
+                required=True
+            ) }}
+
+            <!-- LOAN TERM -->
+            {{ input_combo(
+                name="loan_term",
+                label="Loan Term (years)",
+                suffix="years",
+                placeholder="30",
+                classes="numeric-input",
+                required=True
+            ) }}
+
+            <!-- ADVANCED OPTIONS -->
+            <input type="hidden" id="custom-advanced-state" name="custom_advanced_state" value="0">
+
+            <button
+                type="button"
+                class="mt-2 px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded"
+                hx-get="{{ url_for('calculators.house_affordability_custom_advanced') }}"
+                hx-vals='js:{"show": document.getElementById("custom-advanced-state").value === "0" ? "1" : "0"}'
+                hx-target="#custom-advanced-fields"
+                hx-swap="innerHTML"
+                hx-on::after-request="document.getElementById('custom-advanced-state').value = document.getElementById('custom-advanced-state').value === '0' ? '1' : '0';"
+            >
+                Advanced Options
+            </button>
+
+            <div id="custom-advanced-fields" class="mt-4"></div>
+
+            <!-- CALCULATE BUTTON -->
+            <button type="submit" class="mt-6 px-4 py-2 bg-blue-600 text-white rounded">
+                Calculate
+            </button>
+
+        </form>
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="flex-1 mt-8 lg:mt-0" id="custom-results"></div>
+
+</div>
+
+<!-- SLIDER + AUTO-UPDATE LOGIC -->
+<script>
+(function() {
+    const modeRadios = document.querySelectorAll('input[name="dp_mode"]');
+    const slider = document.getElementById('down_payment_slider');
+    const maxInput = document.getElementById('down_payment_max');
+    const maxRow = document.getElementById('dp-max-row');
+
+    const minLabel = document.getElementById('dp-min-label');
+    const maxLabel = document.getElementById('dp-max-label');
+
+    const sliderLabel = document.getElementById('dp-slider-label');
+
+    const incomePctSlider = document.getElementById('income_pct_slider');
+    const incomePctLabel = document.getElementById('income-pct-label');
+
+    const form = document.getElementById('custom-form');
+    const resultsContainer = document.getElementById('custom-results');
+
+    let resultsVisible = false; // tracks whether an initial calculation has been done
+
+    function formatCurrency(value) {
+        return '$' + Number(value).toLocaleString();
+    }
+
+    function getMode() {
+        return document.querySelector('input[name="dp_mode"]:checked')?.value || 'dollar';
+    }
+
+    function updateDpLabels() {
+        const mode = getMode();
+        const maxVal = parseFloat(maxInput.value || 0) || 0;
+        const sliderVal = parseFloat(slider.value || 0) || 0;
+
+        // Hide/show Max $ row
+        maxRow.classList.toggle("hidden", mode === "percent");
+
+        if (mode === 'percent') {
+            minLabel.textContent = '0%';
+            maxLabel.textContent = '100%';
+            sliderLabel.textContent = sliderVal.toFixed(0) + '%';
+        } else {
+            minLabel.textContent = '$0';
+            maxLabel.textContent = formatCurrency(maxVal);
+            const currentDollar = maxVal * (sliderVal / 100);
+            sliderLabel.textContent = Number(currentDollar).toLocaleString();
+        }
+
+        const percent = sliderVal / 100;
+        sliderLabel.style.left = `calc(${percent * 100}% - 16px)`;
+    }
+
+    function updateIncomePctKnob() {
+        const val = parseFloat(incomePctSlider.value || 0);
+        incomePctLabel.textContent = val + "%";
+
+        const percent = val / 25;
+        incomePctLabel.style.left = `calc(${percent * 100}% - 16px)`;
+    }
+
+    // --- Slider event bindings ---
+    modeRadios.forEach(r => r.addEventListener('change', updateDpLabels));
+    slider.addEventListener('input', updateDpLabels);
+    maxInput.addEventListener('input', updateDpLabels);
+    incomePctSlider.addEventListener('input', updateIncomePctKnob);
+
+    // Initial positions
+    updateDpLabels();
+    updateIncomePctKnob();
+
+    // --- Auto-update logic (matches your pseudocode) ---
+
+    // When HTMX swaps new results into #custom-results, mark results as visible
+    document.body.addEventListener('htmx:afterSwap', function(evt) {
+        if (evt.detail.target === resultsContainer) {
+            resultsVisible = true;
+        }
+    });
+
+    // On any input change inside the form, auto-submit IF results are visible
+    form.addEventListener('input', function() {
+        if (!resultsVisible) return;          // if (show_results == false && input_change == true) -> skip
+        if (typeof htmx !== "undefined") {
+            htmx.trigger(form, 'submit');     // if (show_results == true && input_change == true) -> calculate
+        }
+    });
+
+    // Calculate button:
+    // - Always allowed to submit (first calculation or later)
+    // - HTMX handles the POST via hx-post on the form
+})();
+</script>

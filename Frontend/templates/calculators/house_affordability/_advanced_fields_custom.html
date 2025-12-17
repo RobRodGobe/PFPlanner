@@ -1,0 +1,48 @@
+{# Frontend/templates/calculators/house_affordability/_advanced_fields_custom.html #}
+{% from "macros/input_combo.html" import input_combo %}
+{% set errs = errors or {} %}
+
+<div class="space-y-6">
+
+    {{ input_combo(
+        name="property_tax",
+        label="Property Tax (annual %)",
+        suffix="%",
+        placeholder="0",
+        classes="percent-input",
+        error=errs.property_tax
+    ) }}
+
+    {{ input_combo(
+        name="home_insurance",
+        label="Home Insurance (annual %)",
+        suffix="%",
+        placeholder="0",
+        classes="percent-input",
+        error=errs.home_insurance
+    ) }}
+
+    {{ input_combo(
+        name="hoa",
+        label="HOA Dues (monthly)",
+        prefix="$",
+        placeholder="0",
+        classes="money-input",
+        error=errs.hoa
+    ) }}
+
+    <div class="flex items-center space-x-2">
+        <input 
+            type="checkbox" 
+            name="include_mi"
+            hx-get="{{ url_for('calculators.house_affordability_custom_advanced') }}"
+            hx-vals='js:{"toggle_mi": event.target.checked ? "1" : "0"}'
+            hx-target="#custom-mi-field"
+            hx-swap="innerHTML"
+        >
+        <label>Include Mortgage Insurance</label>
+    </div>
+
+    <div id="custom-mi-field"></div>
+
+</div>

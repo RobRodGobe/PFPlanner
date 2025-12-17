@@ -1,0 +1,36 @@
+{# Frontend/templates/calculators/house_affordability/_custom_results.html #}
+
+{% if result %}
+
+    {% if result.exceeds_limit %}
+    <div class="p-4 mb-4 bg-yellow-50 border border-yellow-300 text-yellow-800 rounded">
+        <strong>Heads up:</strong>
+        Your estimated monthly payment is higher than the maximum allowed based on your income. You may want to adjust your inputs.
+    </div>
+    {% endif %}
+
+    <div class="p-4 bg-white dark:bg-gray-800 rounded shadow space-y-3">
+
+        <p>
+            <strong>Estimated Monthly Payment:</strong>
+            ${{ result.monthly_payment | round(0) | money }}
+        </p>
+
+        <p>
+            <strong>Maximum Allowed Monthly Payment:</strong>
+            ${{ result.allowed_payment | round(0) | money }}
+        </p>
+
+        <p>
+            <strong>Total Financed Amount:</strong>
+            ${{ (result.home_value - result.down_payment) | round(0) | money }}
+        </p>
+
+        <p>
+            <strong>Maximum Affordable Home Price:</strong>
+            ${{ result.home_value | round(0) | money }}
+        </p>
+
+    </div>
+
+{% endif %}
