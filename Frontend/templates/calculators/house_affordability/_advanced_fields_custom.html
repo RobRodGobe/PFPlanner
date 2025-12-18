@@ -4,34 +4,83 @@
 
 <div class="space-y-6">
 
-    {{ input_combo(
-        name="property_tax",
-        label="Property Tax (annual %)",
-        suffix="%",
-        placeholder="0",
-        classes="percent-input",
-        error=errs.property_tax
-    ) }}
+    <!-- Property Tax with tooltip -->
+    <div class="relative">
+        {{ input_combo(
+            name="property_tax",
+            label="Property Tax (annual %)",
+            suffix="%",
+            placeholder="0",
+            classes="percent-input",
+            error=errs.property_tax
+        ) }}
 
-    {{ input_combo(
-        name="home_insurance",
-        label="Home Insurance (annual %)",
-        suffix="%",
-        placeholder="0",
-        classes="percent-input",
-        error=errs.home_insurance
-    ) }}
+        <div 
+            class="tooltip-icon"
+            data-tooltip="Annual property tax expressed as a percentage of the home's value."
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" 
+                 class="h-4 w-4 text-gray-500" 
+                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <circle cx="12" cy="12" r="10" stroke-width="2"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 16v-4m0-4h.01"/>
+            </svg>
+        </div>
+    </div>
 
-    {{ input_combo(
-        name="hoa",
-        label="HOA Dues (monthly)",
-        prefix="$",
-        placeholder="0",
-        classes="money-input",
-        error=errs.hoa
-    ) }}
+    <!-- Home Insurance with tooltip -->
+    <div class="relative">
+        {{ input_combo(
+            name="home_insurance",
+            label="Home Insurance (annual %)",
+            suffix="%",
+            placeholder="0",
+            classes="percent-input",
+            error=errs.home_insurance
+        ) }}
 
-    <div class="flex items-center space-x-2">
+        <div 
+            class="tooltip-icon"
+            data-tooltip="Annual homeowners insurance cost expressed as a percentage of the home's value."
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" 
+                 class="h-4 w-4 text-gray-500" 
+                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <circle cx="12" cy="12" r="10" stroke-width="2"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 16v-4m0-4h.01"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- HOA with tooltip (new) -->
+    <div class="relative">
+        {{ input_combo(
+            name="hoa",
+            label="HOA Dues (monthly)",
+            prefix="$",
+            placeholder="0",
+            classes="money-input",
+            error=errs.hoa
+        ) }}
+
+        <div 
+            class="tooltip-icon"
+            data-tooltip="Monthly homeowners association dues, if applicable."
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" 
+                 class="h-4 w-4 text-gray-500" 
+                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <circle cx="12" cy="12" r="10" stroke-width="2"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 16v-4m0-4h.01"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- MI Checkbox with tooltip (new) -->
+    <div class="relative flex items-center space-x-2">
         <input 
             type="checkbox" 
             name="include_mi"
@@ -39,10 +88,25 @@
             hx-vals='js:{"toggle_mi": event.target.checked ? "1" : "0"}'
             hx-target="#custom-mi-field"
             hx-swap="innerHTML"
+            class="cursor-pointer"
         >
-        <label>Include Mortgage Insurance</label>
+
+        <label class="cursor-pointer">Include Mortgage Insurance</label>
+
+        <div 
+            class="tooltip-icon"
+            data-tooltip="Adds mortgage insurance (MI) to your monthly payment when required."
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" 
+                 class="h-4 w-4 text-gray-500" 
+                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <circle cx="12" cy="12" r="10" stroke-width="2"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 16v-4m0-4h.01"/>
+            </svg>
+        </div>
     </div>
 
-    <div id="custom-mi-field"></div>
+    <div id="custom-mi-field" class="mt-2"></div>
 
 </div>
