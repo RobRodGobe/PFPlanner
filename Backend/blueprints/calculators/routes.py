@@ -5,6 +5,7 @@ from . import calculators_bp
 from Backend.services.house_affordability_standard import calculate_affordability
 from Backend.services.house_affordability_custom import solve_max_home_price
 from Backend.services.sanitize import sanitize_number
+from Backend.services.compound_interest_standard import compound_growth
 
 # ------------------------------------------------------------
 # Calculators Home
@@ -14,9 +15,40 @@ def calculators_home():
     return render_template("calculators/index.html")
 
 
-@calculators_bp.get("/compound-interest")
+@calculators_bp.route("/compound-interest", methods=["GET", "POST"])
 def calc_compound():
-    return render_template("coming_soon.html", title="Compound Interest Calculator")
+    result = None
+
+    if request.method == "POST":
+        # ✅ Reuse your sanitize_number everywhere
+        initial = sanitize_number(request.form.get("initial")) or 0
+        monthly = sanitize_number(request.form.get("monthly")) or 0
+        rate = sanitize_number(request.form.get("rate")) or 0
+        years = sanitize_number(request.form.get("years")) or 0
+
+        # ✅ Enforce integer years (sanitize_number returns float)
+        years = int(years)
+
+        timing = request.form.get("timing", "end")
+
+        result = compound_growth(
+            initial=initial,
+            monthly=monthly,
+            annual_rate=rate,
+            years=years,
+            contribution_timing=timing,
+        )
+
+        if request.headers.get("HX-Request"):
+            return render_template(
+                "calculators/compound_interest/_results.html",
+                result=result
+            )
+
+    return render_template(
+        "calculators/compound_interest/index.html",
+        result=result
+    )
 
 
 @calculators_bp.get("/wealth-multiplier")

@@ -6,7 +6,7 @@ const fs = require("fs");
 const path = require("path");
 
 const script = fs.readFileSync(
-  path.resolve(__dirname, "../../Frontend/static/js/custom_calculator.js"),
+  path.resolve(__dirname, "../../Frontend/static/js/house_affordability/custom_calculator.js"),
   "utf8"
 );
 

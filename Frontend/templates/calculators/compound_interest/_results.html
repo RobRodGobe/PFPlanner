@@ -1,0 +1,32 @@
+<div class="p-4 bg-white dark:bg-gray-800 rounded shadow space-y-4">
+
+    <h2 class="text-xl font-semibold">Results</h2>
+
+    <p><strong>Ending Balance:</strong> {{ result.ending_balance | money }}</p>
+    <p><strong>Total Contributions:</strong> {{ result.total_contributions | money }}</p>
+    <p><strong>Total Growth:</strong> {{ result.total_growth | money }}</p>
+
+    <h3 class="text-lg font-semibold mt-4">Year-by-Year Breakdown</h3>
+
+    <table class="w-full text-left text-sm">
+        <thead>
+            <tr class="border-b">
+                <th class="py-2">Year</th>
+                <th>Balance</th>
+                <th>Contributions</th>
+                <th>Growth</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in result.yearly_breakdown %}
+            <tr class="border-b">
+                <td class="py-2">{{ row.year }}</td>
+                <td>{{ row.balance | money }}</td>
+                <td>{{ row.contributions | money }}</td>
+                <td>{{ row.growth | money }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>

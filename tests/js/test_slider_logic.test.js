@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-const { updateIncomePctKnob } = require("../../Frontend/static/js/custom_calculator.js");
+const { updateIncomePctKnob } = require("../../Frontend/static/js/house_affordability/custom_calculator.js");
 
 test("slider label updates", () => {
   document.body.innerHTML = `

@@ -1,5 +1,15 @@
 - Add contact information
 - Add simple calculators
+- Add radio buttons for annual or monthly contributions on Compound Interest Calculator
+- Add how saving an additional 100, 200 or x amount (that will result in a million) would change the final amount on Compound Interest Calculator
+- Add radio buttons for display mode on Compound Interest Calculator
+- Advanced mode section that includes compounding frequency and contribution timing
+- Add tooltips
+- Make sure chart shows all the columns
+- Implement "bowling point" (when your growth works harder than contributions)
+- Add testing
+- Split index.html into standard and custom
+- Implement custom calculator, adding coast fire point (when growth works harder than income)
 
 Run this after restarting Codespaces
 npm install -g tailwindcss@3

@@ -1,0 +1,48 @@
+{# Frontend/templates/calculators/compound_interest/index.html #}
+{% extends "base.html" %}
+{% from "macros/input_combo.html" import input_combo %}
+{% block title %}House Affordability{% endblock %}
+{% set mode = mode or "standard" %}
+
+{% block content %}
+
+<h1 class="text-2xl font-bold mb-4">Compound Interest Calculator</h1>
+
+<div class="flex flex-col lg:flex-row lg:space-x-12">
+
+    <div class="flex-1">
+        <form
+            method="POST"
+            hx-post="{{ url_for('calculators.calc_compound') }}"
+            hx-target="#results"
+            hx-swap="innerHTML"
+            class="space-y-6 max-w-lg"
+        >
+
+            {{ input_combo("initial", "Initial Investment", prefix="$", classes="money-input") }}
+            {{ input_combo("monthly", "Monthly Contribution", prefix="$", classes="money-input") }}
+            {{ input_combo("rate", "Annual Rate of Return", suffix="%", classes="percent-input") }}
+            {{ input_combo("years", "Years", suffix="yrs", classes="term-input") }}
+
+            <label class="block">
+                <span class="text-sm font-medium">Contribution Timing</span>
+                <select name="timing" class="mt-1 block w-full rounded border-gray-300 dark:bg-gray-700">
+                    <option value="end">End of Month</option>
+                    <option value="beginning">Beginning of Month</option>
+                </select>
+            </label>
+
+            <button class="mt-6 px-4 py-2 bg-blue-600 text-white rounded">
+                Calculate
+            </button>
+        </form>
+    </div>
+
+    <div class="flex-1 mt-8 lg:mt-0" id="results">
+        {% if result %}
+            {% include "calculators/compound_interest/_results.html" %}
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}
