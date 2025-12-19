@@ -1,0 +1,123 @@
+{# Frontend/templates/calculators/compound_interest/_standard_calculator.html #}
+{% from "macros/input_combo.html" import input_combo %}
+
+<div class="flex flex-col lg:flex-row lg:space-x-12">
+
+    <div class="flex-1">
+        <form
+            method="POST"
+            hx-post="{{ url_for('calculators.calc_compound') }}"
+            hx-target="#results"
+            hx-swap="innerHTML"
+            class="space-y-6 max-w-lg"
+        >
+
+            <!-- Initial Investment -->
+            {{ input_combo("initial", "Initial Investment", prefix="$", classes="money-input") }}
+
+            <!-- Annual Rate -->
+            {{ input_combo("rate", "Annual Rate of Return", suffix="%", classes="percent-input") }}
+
+            <!-- Contribution amount -->
+            {{ input_combo("monthly", "Contribution", prefix="$", classes="money-input") }}
+
+            <div class="space-y-2">
+                <span class="text-sm font-medium">Contribution Frequency</span>
+
+                <div class="flex items-center space-x-4">
+                    <label class="flex items-center space-x-2">
+                        <input
+                            type="radio"
+                            name="contribution_frequency"
+                            value="annual"
+                            checked
+                        >
+                        <span>Annually</span>
+                    </label>
+                    
+                    <label class="flex items-center space-x-2">
+                        <input
+                            type="radio"
+                            name="contribution_frequency"
+                            value="monthly"
+                        >
+                        <span>Monthly</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Years -->
+            {{ input_combo("years", "Years", suffix="yrs", classes="numeric-input") }}
+
+            <!-- Mode Toggle -->
+             <div class="space-y-2">
+                <div class="flex items-center space-x-4">
+                    <label class="flex items-center space-x-2">
+                        <input type="radio" name="mode" value="basic" checked>
+                        <span>Basic</span>
+                    </label>
+
+                    <label class="flex items-center space-x-2">
+                        <input type="radio" name="mode" value="advanced">
+                        <span>Advanced</span>
+                    </label>
+                </div>
+            </div>
+
+            <div id="advanced-fields" class="space-y-6 hidden">
+
+                <!-- Compounding Frequency -->
+                <div>
+                    <span class="text-sm font-medium">Compounding Frequency</span>
+                    <div class="flex items-center space-x-4 mt-1">
+                        <label class="flex items-center space-x-2">
+                            <input type="radio" name="compounding" value="annual" checked>
+                            <span>Annually</span>
+                        </label>
+
+                        <label class="flex items-center space-x-2">
+                            <input type="radio" name="compounding" value="monthly">
+                            <span>Monthly</span>
+                        </label>
+                    </div>
+                </div>            
+
+                <!-- Contribution Timing -->
+                <div>
+                    <span class="text-sm font-medium">Contribution Timing</span>
+                    <div class="flex items-center space-x-4 mt-1">
+                        <label class="flex items-center space-x-2">
+                            <input type="radio" name="timing" value="end" checked>
+                            <span>End of Period</span>
+                        </label>
+
+                        <label class="flex items-center space-x-2">
+                            <input type="radio" name="timing" value="beginning">
+                            <span>Beginning of Period</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button
+                hx-post="{{ url_for('calculators.calc_compound') }}"
+                hx-target="#results"
+                hx-swap="innerHTML"
+                class="mt-6 px-4 py-2 bg-blue-600 text-white rounded"
+            >
+                Calculate
+            </button>
+        </form>
+    </div>
+
+    <!-- Results Container -->
+    <div class="flex-1 mt-8 lg:mt-0" id="results">
+        {% if result %}
+            {% include "calculators/compound_interest/_results.html" %}
+        {% endif %}
+    </div>
+
+</div> 
+
+<script src="{{ url_for('static', filename='js/compound_interest/compound_interest.js') }}"></script>

@@ -20,23 +20,43 @@ def calc_compound():
     result = None
 
     if request.method == "POST":
-        # ✅ Reuse your sanitize_number everywhere
         initial = sanitize_number(request.form.get("initial")) or 0
-        monthly = sanitize_number(request.form.get("monthly")) or 0
         rate = sanitize_number(request.form.get("rate")) or 0
-        years = sanitize_number(request.form.get("years")) or 0
+        years = int(sanitize_number(request.form.get("years")) or 0)
 
-        # ✅ Enforce integer years (sanitize_number returns float)
-        years = int(years)
+        # ✅ Contribution amount (always read from same field)
+        contribution_amount = sanitize_number(request.form.get("monthly")) or 0
+
+        # ✅ Frequency & Mode
+        frequency = request.form.get("contribution_frequency", "monthly")
+        mode = request.form.get("mode", "basic")
+
+        # ✅ Monthly vs Annual
+        if frequency == "monthly":
+            monthly_contribution = contribution_amount
+            annual_contribution = 0
+        else:
+            monthly_contribution = 0
+            annual_contribution = contribution_amount
 
         timing = request.form.get("timing", "end")
 
+        if mode == "basic":
+            timing = "end"
+            compounding = "annual"
+        else:
+            timing = request.form.get("timing", "end")
+            compounding = request.form.get("compounding", "annual")
+
         result = compound_growth(
             initial=initial,
-            monthly=monthly,
+            monthly_contribution=monthly_contribution,
             annual_rate=rate,
             years=years,
             contribution_timing=timing,
+            frequency=frequency,
+            annual_contribution=annual_contribution,
+            compounding=compounding
         )
 
         if request.headers.get("HX-Request"):
@@ -50,6 +70,23 @@ def calc_compound():
         result=result
     )
 
+
+@calculators_bp.get("/compound-interest/toggle")
+def compound_interest_toggle():
+    mode = request.args.get("mode", "standard")
+
+    if mode == "custom":
+        return render_template(
+            "calculators/compound_interest/_custom_calculator.html",
+            result=None,
+            errors={}
+        )
+
+    return render_template(
+        "calculators/compound_interest/_standard_calculator.html",
+        result=None,
+        errors={}
+    )
 
 @calculators_bp.get("/wealth-multiplier")
 def calc_wealth():

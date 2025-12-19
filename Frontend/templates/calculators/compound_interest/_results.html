@@ -12,18 +12,18 @@
         <thead>
             <tr class="border-b">
                 <th class="py-2">Year</th>
-                <th>Balance</th>
                 <th>Contributions</th>
                 <th>Growth</th>
+                <th>Total Balance</th>
             </tr>
         </thead>
         <tbody>
             {% for row in result.yearly_breakdown %}
             <tr class="border-b">
                 <td class="py-2">{{ row.year }}</td>
-                <td>{{ row.balance | money }}</td>
-                <td>{{ row.contributions | money }}</td>
-                <td>{{ row.growth | money }}</td>
+                <td>${{ row.contributions | money }}</td>
+                <td>${{ row.growth | money }}</td>
+                <td>${{ row.balance | money }}</td>
             </tr>
             {% endfor %}
         </tbody>

@@ -1,48 +1,61 @@
 {# Frontend/templates/calculators/compound_interest/index.html #}
 {% extends "base.html" %}
 {% from "macros/input_combo.html" import input_combo %}
-{% block title %}House Affordability{% endblock %}
+{% block title %}Compount Interest{% endblock %}
 {% set mode = mode or "standard" %}
 
 {% block content %}
 
-<h1 class="text-2xl font-bold mb-4">Compound Interest Calculator</h1>
+<h1 class="text-2xl font-bold mb-4">Compount Interest Calculator</h1>
 
-<div class="flex flex-col lg:flex-row lg:space-x-12">
+<div class="flex items-center justify-between mb-6">    
+    <!-- Toggle bar -->
+    <div class="flex space-x-2" id="toggle-bar">
 
-    <div class="flex-1">
-        <form
-            method="POST"
-            hx-post="{{ url_for('calculators.calc_compound') }}"
-            hx-target="#results"
+        <button
+            data-mode="standard"
+            hx-get="{{ url_for('calculators.compound_interest_toggle') }}"
+            hx-vals='{"mode": "standard"}'
+            hx-target="#calculator-section"
             hx-swap="innerHTML"
-            class="space-y-6 max-w-lg"
+            class="toggle-btn px-4 py-2 rounded bg-blue-600 text-white"
         >
+            Standard Calculator
+        </button>
 
-            {{ input_combo("initial", "Initial Investment", prefix="$", classes="money-input") }}
-            {{ input_combo("monthly", "Monthly Contribution", prefix="$", classes="money-input") }}
-            {{ input_combo("rate", "Annual Rate of Return", suffix="%", classes="percent-input") }}
-            {{ input_combo("years", "Years", suffix="yrs", classes="term-input") }}
+        <button
+            data-mode="custom"
+            hx-get="{{ url_for('calculators.compound_interest_toggle') }}"
+            hx-vals='{"mode": "custom"}'
+            hx-target="#calculator-section"
+            hx-swap="innerHTML"
+            class="toggle-btn px-4 py-2 rounded bg-gray-200 dark:bg-gray-700"
+        >
+            Customized Calculator
+        </button>
 
-            <label class="block">
-                <span class="text-sm font-medium">Contribution Timing</span>
-                <select name="timing" class="mt-1 block w-full rounded border-gray-300 dark:bg-gray-700">
-                    <option value="end">End of Month</option>
-                    <option value="beginning">Beginning of Month</option>
-                </select>
-            </label>
-
-            <button class="mt-6 px-4 py-2 bg-blue-600 text-white rounded">
-                Calculate
-            </button>
-        </form>
     </div>
-
-    <div class="flex-1 mt-8 lg:mt-0" id="results">
-        {% if result %}
-            {% include "calculators/compound_interest/_results.html" %}
-        {% endif %}
-    </div>
-
 </div>
+
+<!-- MAIN CALCULATOR SECTION (HTMX SWAPS THIS) -->
+<div id="calculator-section">
+    {% include "calculators/compound_interest/_standard_calculator.html" %}
+</div>
+
+<script>
+document.addEventListener("click", function(e) {
+    if (!e.target.classList.contains("toggle-btn")) return;
+
+    // Remove active state from all buttons
+    document.querySelectorAll(".toggle-btn").forEach(btn => {
+        btn.classList.remove("bg-blue-600", "text-white");
+        btn.classList.add("bg-gray-200", "dark:bg-gray-700");
+    });
+
+    // Add active state to clicked button
+    e.target.classList.remove("bg-gray-200", "dark:bg-gray-700");
+    e.target.classList.add("bg-blue-600", "text-white");
+});
+</script>
+
 {% endblock %}
